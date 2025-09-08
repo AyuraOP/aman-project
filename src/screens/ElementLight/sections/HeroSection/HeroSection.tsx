@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { VariableProximityText } from "../../../../components/animations/VariableProximityText";
+import { AnimatedButton } from "../../../../components/animations/AnimatedButton";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -22,10 +24,10 @@ export const HeroSection = (): JSX.Element => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Parallax effect for layered images with specific speeds
-      // f14 (layer1) - 50% speed (slowest background)
-     gsap.to(layer1Ref.current, {
-        y: () => window.innerHeight * 0.5,
+      // Improved parallax effect with proper speeds
+      // f14 (layer1) - slowest background
+      gsap.to(layer1Ref.current, {
+        y: () => -window.innerHeight * 0.3,
         ease: "none",
         scrollTrigger: {
           trigger: heroRef.current,
@@ -35,49 +37,36 @@ export const HeroSection = (): JSX.Element => {
         }
       });
 
-
-      // f14 (layer1) - 50% speed upwards
-      gsap.to(layer1Ref.current, {
-        y: () => -window.innerHeight * 0.5,
-        ease: "none",
-        scrollTrigger: {
-          trigger: layer1Ref.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true
-        }
-      });
-
-      // heroBack (layer2) - 50% speed upwards
+      // heroBack (layer2) - slightly faster than f14
       gsap.to(layer2Ref.current, {
-        y: () => -window.innerHeight * 0.5,
+        y: () => -window.innerHeight * 0.4,
         ease: "none",
         scrollTrigger: {
-          trigger: layer2Ref.current,
+          trigger: heroRef.current,
           start: "top bottom",
           end: "bottom top",
           scrub: true
         }
       });
 
-      // heroMid (layer3) - 80% speed upwards
+      // heroMid (layer3) - faster than heroBack
       gsap.to(layer3Ref.current, {
-        y: () => -window.innerHeight * 0.8,
+        y: () => -window.innerHeight * 0.6,
         ease: "none",
         scrollTrigger: {
-          trigger: layer3Ref.current,
+          trigger: heroRef.current,
           start: "top bottom",
           end: "bottom top",
           scrub: true
         }
       });
 
-      // heroFront (layer4) - 100% speed (normal scroll, no y change)
+      // heroFront (layer4) - 100% speed (normal scroll speed)
       gsap.to(layer4Ref.current, {
         y: 0,
         ease: "none",
         scrollTrigger: {
-          trigger: layer4Ref.current,
+          trigger: heroRef.current,
           start: "top bottom",
           end: "bottom top",
           scrub: true
@@ -118,15 +107,14 @@ export const HeroSection = (): JSX.Element => {
         <div className="relative h-full">
           {/* Layered Background Images */}
           <div className="absolute inset-0 overflow-hidden">
-            <img src={f14} className="absolute inset-0 w-full h-screen object-cover z-[0]" />
-            {/* <img ref={layer1Ref} src={f14} className="absolute inset-0 w-full h-screen object-cover z-[0]" /> */}
-            {/* <img ref={layer2Ref} src={heroBack} className="absolute inset-0 w-full h-screen object-cover z-[1]" /> */}
-            {/* <img ref={layer3Ref} src={heroMid} className="absolute inset-0 w-full h-screen object-cover z-[2]" /> */}
-            {/* <img ref={layer4Ref} src={heroFront} className="absolute inset-0 w-full h-screen object-cover z-[3]" /> */}
+            <img ref={layer1Ref} src={f14} className="absolute inset-0 w-full h-screen object-cover z-[0]" />
+            <img ref={layer2Ref} src={heroBack} className="absolute inset-0 w-full h-screen object-cover z-[1]" />
+            <img ref={layer3Ref} src={heroMid} className="absolute inset-0 w-full h-screen object-cover z-[2]" />
+            <img ref={layer4Ref} src={heroFront} className="absolute inset-0 w-full h-screen object-cover z-[3]" />
           </div>
 
-          <div className="relative z-10 h-full flex items-center flex-col">
-            <header className="flex min-w-[1203px] items-center justify-between px-10 py-7 overflow-visible">
+          <div className="relative z-10 h-full flex items-center flex-col max-w-full">
+            <header className="flex w-full max-w-[1203px] items-center justify-between px-4 md:px-10 py-7 overflow-visible">
               <div className="w-10 h-10 rounded-lg flex items-center justify-center transition-transform duration-300 hover:scale-110">
                 <img
                   className="w-full h-full rounded-lg object-cover"
@@ -135,18 +123,18 @@ export const HeroSection = (): JSX.Element => {
                 />
               </div>
 
-              <div className="flex items-center gap-8">
-                <div className="[font-family:'Inter',Helvetica] font-normal text-white text-[22.7px] tracking-[0] leading-[28.8px] cursor-pointer relative group">
+              <div className="flex items-center gap-4 md:gap-8">
+                <div className="[font-family:'Inter',Helvetica] font-normal text-white text-lg md:text-[22.7px] tracking-[0] leading-[28.8px] cursor-pointer relative group hidden md:block">
                   LOGIN
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-forest-green transition-all duration-300 group-hover:w-full"></span>
                 </div>
 
-                <Link to="/login-type-selector" className="animated-button h-12 bg-forest-green/50 backdrop-blur-sm rounded-[50px] p-2 flex items-center gap-3 inline-flex transition-all duration-300 hover:bg-forest-green/70 hover:scale-105 hover:shadow-lg hover:shadow-forest-green/25">
-                  <span className="pl-2 [font-family:'Inter',Helvetica] font-normal text-white text-[15px] text-center tracking-[0] leading-[19.2px]">
+                <Link to="/login-type-selector" className="animated-button h-10 md:h-12 bg-forest-green/50 backdrop-blur-sm rounded-[50px] p-2 flex items-center gap-2 md:gap-3 inline-flex transition-all duration-300 hover:bg-forest-green/70 hover:scale-105 hover:shadow-lg hover:shadow-forest-green/25">
+                  <span className="pl-2 [font-family:'Inter',Helvetica] font-normal text-white text-sm md:text-[15px] text-center tracking-[0] leading-[19.2px]">
                     Login as
                   </span>
-                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center transition-transform duration-300 group-hover:rotate-180">
-                    <svg className="w-5 h-5 text-forest-green" fill="currentColor" viewBox="0 0 20 20">
+                  <div className="w-6 h-6 md:w-10 md:h-10 bg-white rounded-full flex items-center justify-center transition-transform duration-300 group-hover:rotate-180">
+                    <svg className="w-3 h-3 md:w-5 md:h-5 text-forest-green" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
                     </svg>
                   </div>
@@ -154,43 +142,41 @@ export const HeroSection = (): JSX.Element => {
               </div>
             </header>
 
-            <main className="flex-1 flex flex-col min-w-[1203px] justify-between px-10 pb-14">
-              <div className="max-w-[718px]">
-                <h1 ref={titleRef} className="[font-family:'Inter',Helvetica] mb-5 font-bold text-black text-[74px] tracking-[-3.20px] leading-[70px]">
-                  Empowering Climate
-                  <br />
-                  Action Through
-                  <br />
-                  <span className="text-forest-green">Blockchain</span>
-                  <br />
-                  Innovation
-                </h1>
+            <main className="flex-1 flex flex-col w-full max-w-[1203px] justify-between px-4 md:px-10 pb-8 md:pb-14">
+              <div className="max-w-full md:max-w-[718px]">
+                <div ref={titleRef} className="mb-5">
+                  <VariableProximityText
+                    text="Empowering Climate Action Through Blockchain Innovation"
+                    className="[font-family:'Inter',Helvetica] font-bold text-black text-3xl md:text-5xl lg:text-[74px] tracking-[-1px] md:tracking-[-3.20px] leading-tight md:leading-[70px]"
+                  />
+                </div>
               </div>
 
-              <div className="flex justify-end pl-56 max-w-[718px]">
-                <div className="max-w-[499px]">
+              <div className="flex flex-col md:flex-row justify-center md:justify-end md:pl-32 lg:pl-56 max-w-full md:max-w-[718px] mt-8 md:mt-0">
+                <div className="max-w-full md:max-w-[499px]">
                   <div className="mb-4">
-                    <p ref={subtitleRef} className="[font-family:'Inter',Helvetica] font-bold text-[#252a18] text-[16px] text-right tracking-[-0.80px] leading-5">
-                      Our blockchain-enabled carbon credit platform ensures <br />
+                    <p ref={subtitleRef} className="[font-family:'Inter',Helvetica] font-bold text-[#252a18] text-sm md:text-[16px] text-center md:text-right tracking-[-0.40px] md:tracking-[-0.80px] leading-5">
+                      Our blockchain-enabled carbon credit platform ensures 
                       transparency and integrity in the voluntary carbon market.{" "}
-                      <br />
                       Join us in making a measurable impact through verified
-                      <br />
                       afforestation projects.
                     </p>
                   </div>
 
-                  <div className="flex justify-end">
-                    <Link to="/login-type-selector" className="animated-button h-12 bg-forest-green rounded-[50px] p-1 flex items-center gap-2 inline-flex transition-all duration-300 hover:bg-emerald-700 hover:scale-105 hover:shadow-xl hover:shadow-forest-green/30 group">
-                      <span className="pl-2 [font-family:'Inter',Helvetica] font-normal text-white text-[15px] text-center tracking-[0] leading-[19.2px]">
+                  <div className="flex justify-center md:justify-end">
+                    <AnimatedButton
+                      variant="primary"
+                      size="lg"
+                      onClick={() => window.location.href = '/login-type-selector'}
+                      className="bg-forest-green hover:bg-emerald-700 shadow-xl hover:shadow-forest-green/30"
+                    >
+                      <span className="flex items-center gap-2">
                         Get Started
-                      </span>
-                      <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="w-9 h-9 text-forest-green transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M7 17l10-10m0 0v7m0-7h-7" />
                         </svg>
-                      </div>
-                    </Link>
+                      </span>
+                    </AnimatedButton>
                   </div>
                 </div>
               </div>
